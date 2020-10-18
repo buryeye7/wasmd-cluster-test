@@ -1,0 +1,14 @@
+NAME                                               STATUS   ROLES    AGE    VERSION
+ip-172-20-33-127.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-37-143.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-45-106.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-45-164.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-49-23.ap-northeast-1.compute.internal    Ready    node     2d2h   v1.12.1
+ip-172-20-50-65.ap-northeast-1.compute.internal    Ready    node     2d2h   v1.12.1
+ip-172-20-50-89.ap-northeast-1.compute.internal    Ready    node     2d2h   v1.12.1
+ip-172-20-54-132.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-54-51.ap-northeast-1.compute.internal    Ready    node     2d2h   v1.12.1
+ip-172-20-59-104.ap-northeast-1.compute.internal   Ready    master   2d2h   v1.12.1
+ip-172-20-60-53.ap-northeast-1.compute.internal    Ready    node     2d2h   v1.12.1
+ip-172-20-62-195.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1
+ip-172-20-63-173.ap-northeast-1.compute.internal   Ready    node     2d2h   v1.12.1

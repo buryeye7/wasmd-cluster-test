@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaia-seed
+spec:
+  selector:
+    matchLabels:
+      run: gaia-seed
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        run: gaia-seed
+    spec:
+      containers:
+        - name: gaia-seed
+          image: buryeye7/friday-seed:latest
+          env:
+            - name: COUCHDB
+              value: couchdb-app-svc
+            - name: TARGET 
+              value: 
+            - name: WALLET_CNT
+              value: "9"
+          command: ["./scripts/start-seed.sh"]
+          ports:
+            - name: rpc
+              containerPort: 26657
+              protocol: TCP
+            - name: network
+              containerPort: 26656
+              protocol: TCP
+            - name: clif
+              containerPort: 1317
+              protocol: TCP
+            - name: prometheus
+              containerPort: 26660
+              protocol: TCP
+      nodeName: ip-172-20-37-143.ap-northeast-1.compute.internal 

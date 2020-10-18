@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaia-node5
+  labels:
+    app: gaia-node5
+spec:
+  selector:
+    matchLabels:
+      app: gaia-node5
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gaia-node5
+    spec:
+      containers:
+        - name: gaia-node5
+          image: buryeye7/friday-node:latest
+          command: ["./scripts/start-node.sh"]
+          env:
+            - name: TARGET
+              value:  
+            - name: WALLET_ALIAS
+              value: node5
+          ports:
+            - name: rpc
+              containerPort: 26657
+              protocol: TCP
+            - name: network
+              containerPort: 26656
+              protocol: TCP
+            - name: clif
+              containerPort: 1317
+              protocol: TCP
+            - name: prometheus
+              containerPort: 26660
+              protocol: TCP
+      nodeName: ip-172-20-50-89.ap-northeast-1.compute.internal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gaia-node5
+spec:
+  type: LoadBalancer
+  selector:
+    app: gaia-node5
+  ports:
+    - protocol: TCP
+      port: 1317
+      targetPort: 1317

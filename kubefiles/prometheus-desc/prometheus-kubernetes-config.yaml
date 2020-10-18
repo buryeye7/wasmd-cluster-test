@@ -1,0 +1,40 @@
+global:
+ scrape_interval: 2s
+
+scrape_configs:
+  - job_name: 'hdac-node1'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.5.25:26660']
+  - job_name: 'hdac-node2'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.4.25:26660']
+  - job_name: 'hdac-node3'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.3.26:26660']
+  - job_name: 'hdac-node4'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.9.25:26660']
+  - job_name: 'hdac-node5'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.10.25:26660']
+  - job_name: 'hdac-node6'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.11.25:26660']
+  - job_name: 'hdac-node7'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.2.25:26660']
+  - job_name: 'hdac-node8'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.6.25:26660']
+  - job_name: 'hdac-node9'
+    scrape_interval: 2s
+    static_configs:
+      - targets: ['100.96.7.27:26660']

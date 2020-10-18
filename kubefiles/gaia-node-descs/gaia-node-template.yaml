@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gaia-node{NO}
+  labels:
+    app: gaia-node{NO}
+spec:
+  selector:
+    matchLabels:
+      app: gaia-node{NO}
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gaia-node{NO}
+    spec:
+      containers:
+        - name: gaia-node{NO}
+          image: buryeye7/friday-node:latest
+          command: ["./scripts/start-node.sh"]
+          env:
+            - name: TARGET
+              value: {TARGET} 
+            - name: WALLET_ALIAS
+              value: {WALLET_ALIAS}
+          ports:
+            - name: rpc
+              containerPort: 26657
+              protocol: TCP
+            - name: network
+              containerPort: 26656
+              protocol: TCP
+            - name: clif
+              containerPort: 1317
+              protocol: TCP
+            - name: prometheus
+              containerPort: 26660
+              protocol: TCP
+      nodeName: {NODE_NAME}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gaia-node{NO}
+spec:
+  type: LoadBalancer
+  selector:
+    app: gaia-node{NO}
+  ports:
+    - protocol: TCP
+      port: 1317
+      targetPort: 1317
