@@ -99,7 +99,7 @@ wasmd validate-genesis
 
 cp ~/.wasmd/config/genesis.json .
 curl -XPUT $COUCHDB/files/genesis -d "{\"content\":\"genesis_file\"}"
-REV=$(curl -XGET $COUCHDB/files/genesis | jq ._rev)
-curl -XPOST $COUCHDB/files/genesis/genesis.json?rev=$REV --data-binary @genesis.json -H "ContentType:application/json"
+REV=$(curl -XGET $COUCHDB/files/genesis | jq ._rev | sed 's/"//g')
+curl -XPUT $COUCHDB/files/genesis/genesis.json?rev=$REV --data-binary @genesis.json -H "ContentType:application/json"
 
 #wasmd start

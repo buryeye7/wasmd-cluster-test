@@ -43,7 +43,7 @@ done < /tmp/wasmd.txt
 # run execution engine grpc server
 wasmd init --chain-id testnet testnet
 
-REV=$(curl -XGET $COUCHDB/files/genesis | jq ._rev)
+REV=$(curl -XGET $COUCHDB/files/genesis | jq ._rev | sed 's/"//g')
 curl -XGET $COUCHDB/files/genesis/genesis.json?rev=$REV > genesis.json
 
 add_key_first node
