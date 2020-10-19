@@ -84,11 +84,11 @@ done
 
 node=$(show_key node)
 wasmd add-genesis-account $node 1000000000stake,100000000000000000000ucosm
-for i in {1..10}
-do
-    node=$(show_key node$i)
-    wasmd add-genesis-account $node 1000000000stake,100000000000000000000ucosm
-done
+#for i in {1..10}
+#do
+#    node=$(show_key node$i)
+#    wasmd add-genesis-account $node 1000000000stake,100000000000000000000ucosm
+#done
 
 gentx node
 
