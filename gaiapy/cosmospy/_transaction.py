@@ -26,7 +26,7 @@ class Transaction:
         sequence: int,
         fee: int,
         gas: int,
-        fee_denom: str = "uatom",
+        fee_denom: str = "ucosm",
         memo: str = "",
         chain_id: str = "cosmoshub-3",
         sync_mode: SyncMode = "sync",
@@ -42,7 +42,7 @@ class Transaction:
         self._sync_mode = sync_mode
         self._msgs: List[dict] = []
 
-    def add_transfer(self, recipient: str, amount: int, denom: str = "uatom") -> None:
+    def add_transfer(self, recipient: str, amount: int, denom: str = "ucosm") -> None:
         transfer = {
             "type": "cosmos-sdk/MsgSend",
             "value": {

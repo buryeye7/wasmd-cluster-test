@@ -28,6 +28,7 @@ while i < 600:
                 account_num=account_num,
                 sequence=i,
                 fee=5000,
+                fee_denom='ucosm',
                 gas=200000,
                 memo="",
                 chain_id="testnet",
@@ -35,7 +36,7 @@ while i < 600:
             )
         amount = (i+1)%100 + 1
         try:
-            tx.add_transfer(recipient="cosmos19t5wd4u9euv2etjgcqtjf3gg5v76j0m8rse8w8", amount=amount) 
+            tx.add_transfer(recipient="cosmos19t5wd4u9euv2etjgcqtjf3gg5v76j0m8rse8w8", amount=amount, denom='ucosm') 
             pushable_tx=tx.get_pushable()
             #print(pushable_tx)
             headers = {'Content-Type': 'application/json; charset=utf-8'}
