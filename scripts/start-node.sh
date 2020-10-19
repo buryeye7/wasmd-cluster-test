@@ -14,6 +14,17 @@ function add_key_first() {
     "
 }
 
+function show_key() {
+    res=$(expect -c "
+    set timeout 3
+    spawn wasmcli keys show -a $1
+    expect "passphrase:"
+    send \"$PW\\r\"
+    expect eof
+    " | sed "s/[^A-Z,a-z,0-9, ,:,\,,\-]//g")
+    echo $(echo $res | awk -F' ' '{print $NF}')
+}
+
 COUCHDB="http://admin:admin@couchdb-app-svc:5984"
 rm -rf $HOME/.wasmd
 rm -rf $HOME/.wasmcli
@@ -42,7 +53,7 @@ sed -i "s/prometheus = false/prometheus = true/g" $HOME/.nodef/config/config.tom
 sed -i "s/size = 5000/size = 10000/g" $HOME/.nodef/config/config.toml
 sed -i -r 's/minimum-gas-prices = ""/minimum-gas-prices = "0.025ucosm"/' $HOME/.wasmd/config/app.toml
 
-WALLET_ADDRESS=$(wasmcli keys show node -a)
+WALLET_ADDRESS=$(show_key node)
 NODE_PUB_KEY=$(wasmd tendermint show-validator)
 NODE_ID=$(wasmd tendermint show-node-id)
 

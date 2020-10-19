@@ -3,6 +3,17 @@
 COUCHDB="http://admin:admin@couchdb-app-svc:5984"
 PW="12345678"
 
+function show_key() {
+    res=$(expect -c "
+    set timeout 3
+    spawn wasmcli keys show -a $1
+    expect "passphrase:"
+    send \"$PW\\r\"
+    expect eof
+    " | sed "s/[^A-Z,a-z,0-9, ,:,\,,\-]//g")
+    echo $(echo $res | awk -F' ' '{print $NF}')
+}
+
 mkdir -p $HOME/.wasmd
 mkdir -p $HOME/.wasmcli
 
@@ -32,7 +43,7 @@ curl -X PUT $COUCHDB/seed-info/seed-info -d "{\"target\":\"${NODE_ID}@${IP_ADDRE
 
 for i in $(seq 1 $WALLET_CNT)
 do
-    wallet_address=$(wasmcli keys show node$i -a)
+    wallet_address=$(show_key node$i)
     echo $wallet_address
     curl -X PUT $COUCHDB/seed-wallet-info/$wallet_address -d "{\"wallet_alias\":\"node$i\"}"
 done
