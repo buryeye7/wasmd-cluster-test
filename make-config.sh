@@ -1,5 +1,6 @@
 #!/bin/bash
 
+git rm -r config
 rm -rf config
 
 mkdir -p config/wasmd-config
