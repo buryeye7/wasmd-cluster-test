@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./make-seed.sh
+./scripts/make-seed.sh
 
 COUCHDB="http://admin:admin@couchdb-app-svc:5984"
 PW="12345678"
