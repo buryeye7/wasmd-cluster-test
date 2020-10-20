@@ -20,7 +20,7 @@ fd=open("./diffs/diff_" + privkey +".txt","w")
 
 i=0
 #for i in range(10000):
-while i < 600:
+while i < 3600:
         print("count", i)
         print("trigger time", datetime.datetime.now())
         tx = Transaction(
@@ -32,7 +32,7 @@ while i < 600:
                 gas=200000,
                 memo="",
                 chain_id="testnet",
-                sync_mode="sync"
+                sync_mode="async"
             )
         amount = (i+1)%100 + 1
         try:

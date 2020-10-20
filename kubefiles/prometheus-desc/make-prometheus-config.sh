@@ -17,10 +17,10 @@ do
         continue
     fi
     ip=$(echo $line | awk -F' ' '{print $6}')
-    if [[ "$line" == *"hdac-seed"* ]];then
-        echo -e "$TEMPLATE" | sed -e "s/{JOB}/\'hdac-seed\'/g" | sed -e "s/{TARGET}/[\'$ip:26660\']/g" >> prometheus-kubernetes-config.yaml
+    if [[ "$line" == *"gaia-seed"* ]];then
+        echo -e "$TEMPLATE" | sed -e "s/{JOB}/\'gaia-seed\'/g" | sed -e "s/{TARGET}/[\'$ip:26660\']/g" >> prometheus-kubernetes-config.yaml
     else
-        echo -e "$TEMPLATE" | sed -e "s/{JOB}/\'hdac-node$i\'/g" | sed -e "s/{TARGET}/[\'$ip:26660\']/g" >> prometheus-kubernetes-config.yaml
+        echo -e "$TEMPLATE" | sed -e "s/{JOB}/\'gaia-node$i\'/g" | sed -e "s/{TARGET}/[\'$ip:26660\']/g" >> prometheus-kubernetes-config.yaml
         i=$((i + 1))
     fi
 done
