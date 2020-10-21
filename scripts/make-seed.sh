@@ -68,7 +68,7 @@ rm -rf $HOME/.wasmcli
 #wasmcli config chain-id testnet
 #wasmcli config trust-node true
 #wasmcli config node http://localhost:26657
-#wasmcli config output json
+wasmcli config output json
 
 # init node
 wasmd init testnet --chain-id testnet 

@@ -102,6 +102,34 @@ do
     ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
 done
 
+#wasm store
+IA_COUNT=$(curl $COUCHDB/input-address/_all_docs 2>/dev/null | jq '.rows | length')
+IA_COUNT=$((IA_COUNT - 1))
+PRIV_KEYS=()
+ACCOUNT_NUMS=()
+for i in $(seq 0 $IA_COUNT)
+do
+    key=$(curl $COUCHDB/input-address/_all_docs 2>/dev/null | jq .rows[$i].key | sed "s/\"//g")
+    PRIV_KEYS[$i]=$(curl $COUCHDB/input-address/$key 2>/dev/null | jq .private_key| sed "s/\"//g")
+    address=$(curl $COUCHDB/input-address/$key 2>/dev/null | jq .address | sed "s/\"//g")
+    expect -c "
+    set timeout 3
+    spawn kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli tx wasm store $TARGET --fees=5000ucosm --chain-id=testnet --trust-node
+    expect "passphrase:"
+        send \"$PW\\r\"
+    expect "y/N]:"
+        send \"y\\r\"
+    expect "passphrase:"
+        send \"$PW\\r\"
+    expect eof
+    "
+    echo ${PRIV_KEYS[$i]}
+    sleep 10
+    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
+done
+
+
+
 wait_lb_ready
 
 NODE_ADDRESSES=()

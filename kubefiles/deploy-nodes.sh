@@ -136,6 +136,7 @@ done
 INDEX=$((INDEX + 1))
 cat ./gaia-seed-desc/gaia-seed-template.yaml | sed "s/{NODE_NAME}/${NAME_ARRAY[$INDEX]}/g" | sed "s/{TARGET}/${TARGET}/g" | sed "s/{WALLET_CNT}/\"$HDAC_NODE_NO_WITH_SEED\"/g" > ./gaia-seed-desc/gaia-seed.yaml
 kubectl apply -f ./gaia-seed-desc/gaia-seed.yaml
+
 waiting_single "gaia-seed" 
 
 sleep 20
