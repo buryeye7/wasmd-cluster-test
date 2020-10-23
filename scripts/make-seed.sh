@@ -75,7 +75,7 @@ wasmd init testnet --chain-id testnet
 
 sed -i -r 's/minimum-gas-prices = ""/minimum-gas-prices = "0.025ucosm"/' $HOME/.wasmd/config/app.toml
 sed -i "s/prometheus = false/prometheus = true/g" $HOME/.wasmd/config/config.toml
-sed -i "s/size = 5000/size = 10000/g" $HOME/.wasmd/config/config.toml
+#sed -i "s/size = 5000/size = 10000/g" $HOME/.wasmd/config/config.toml
 
 
 add_key_first node
@@ -85,11 +85,11 @@ do
 done
 
 node=$(show_key node)
-wasmd add-genesis-account $node 1000000000stake,100000000000000000000ucosm
+wasmd add-genesis-account $node 1000000000stake,100000000000000000000000ucosm
 for i in {1..10}
 do
     node=$(show_key node$i)
-    wasmd add-genesis-account $node 1000000000stake,100000000000000000000ucosm
+    wasmd add-genesis-account $node 1000000000stake,100000000000000000000000ucosm
 done
 
 gentx node

@@ -23,7 +23,7 @@ WORKDIR $GOPATH/src
 #RUN git clone https://github.com/rizon-world/friday
 RUN git clone https://github.com/CosmWasm/wasmd.git
 WORKDIR $GOPATH/src/wasmd
-RUN git checkout v0.10.0
+#RUN git checkout v0.10.0
 RUN make install
 
 RUN wasmd version --long

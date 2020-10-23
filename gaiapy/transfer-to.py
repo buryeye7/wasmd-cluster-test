@@ -20,7 +20,7 @@ fd=open("./diffs/diff_" + privkey +".txt","w")
 
 i=0
 #for i in range(10000):
-while i < 3600:
+while i < 100000:
         print("count", i)
         print("trigger time", datetime.datetime.now())
         tx = Transaction(

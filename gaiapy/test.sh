@@ -99,7 +99,8 @@ do
     "
     echo ${PRIV_KEYS[$i]}
     sleep 10
-    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
+    #ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
+    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | jq .value.account_number | sed "s/\"//g")
 done
 
 wait_lb_ready

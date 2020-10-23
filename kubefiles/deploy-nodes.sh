@@ -1,5 +1,13 @@
 #!/bin/bash
 
+if [ $# == 0 ];then 
+    echo "Please enter param, test or test-wasm"
+    exit 0
+fi
+
+param=$1
+
+
 ../gaiapy/kill-transfer-to.sh
 
 FILE_NO=$(ls -l gaia-node-descs | grep ^- | wc -l)
@@ -127,7 +135,7 @@ curl -X PUT $COUCHDB/seed-wallet-info
 curl -X PUT $COUCHDB/files
 
 #for i in {1..100}
-for i in {1..50}
+for i in {1..2}
 do
     data=$(../gaiapy/make-wallet.py)
     curl -X PUT $COUCHDB/input-address/$i -d "$data"  
@@ -169,4 +177,9 @@ cat ./grafana-desc/grafana-template.yaml | sed "s/{NODE_NAME}/${NAME_ARRAY[$INDE
 kubectl apply -f grafana-desc/grafana.yaml
     
 cd ../gaiapy
-./test.sh 10
+if [[ $param == "test" ]];then
+    ./test.sh 10
+else
+    ./test-wasm.sh 10
+fi
+

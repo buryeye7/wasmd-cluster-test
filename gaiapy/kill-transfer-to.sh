@@ -1,11 +1,12 @@
 #!/bin/bash
 
-ps -ef | grep transfer | awk -F' ' '{print $2}' | while read line
+ps -ef | grep transfer-to > /tmp/transfer-to.txt
+
+while read line
 do
-    echo $line
     if [[ $line == *"auto"* ]];then
         continue
     fi
-    kill -9 $line
-done
-
+    process=$(echo $line | awk -F' ' '{print $2}')
+    kill -9 $process
+done < /tmp/transfer-to.txt

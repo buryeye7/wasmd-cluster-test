@@ -99,36 +99,53 @@ do
     "
     echo ${PRIV_KEYS[$i]}
     sleep 10
-    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
+    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | jq .value.account_number | sed "s/\"//g")
 done
 
 #wasm store
-IA_COUNT=$(curl $COUCHDB/input-address/_all_docs 2>/dev/null | jq '.rows | length')
-IA_COUNT=$((IA_COUNT - 1))
-PRIV_KEYS=()
-ACCOUNT_NUMS=()
+expect -c "
+set timeout 3
+spawn kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli tx wasm store $WASM_TARGET --from node --gas-prices=0.025ucosm --gas=auto --gas-adjustment=1.2 -y --chain-id=testnet --trust-node
+expect "passphrase:"
+send \"$PW\\r\"
+expect "passphrase:"
+send \"$PW\\r\"
+expect eof
+"
+
+sleep 10
+
+echo "GAIA_SEED" $GAIA_SEED
+CODE_ID=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query wasm list-code --chain-id=testnet --trust-node | jq .[0].id)
+echo "CODE_ID" $CODE_ID
+
+rm contract-list.txt
+CONTRACT=()
 for i in $(seq 0 $IA_COUNT)
 do
     key=$(curl $COUCHDB/input-address/_all_docs 2>/dev/null | jq .rows[$i].key | sed "s/\"//g")
-    PRIV_KEYS[$i]=$(curl $COUCHDB/input-address/$key 2>/dev/null | jq .private_key| sed "s/\"//g")
     address=$(curl $COUCHDB/input-address/$key 2>/dev/null | jq .address | sed "s/\"//g")
+    message="{\"arbiter\":\"$address\",\"recipient\":\"cosmos19t5wd4u9euv2etjgcqtjf3gg5v76j0m8rse8w8\"}"
     expect -c "
     set timeout 3
-    spawn kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli tx wasm store $TARGET --fees=5000ucosm --chain-id=testnet --trust-node
+    spawn kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli tx wasm instantiate $CODE_ID {${message}} --from node --amount=100000000000000000ucosm --label escrow_1 --gas-prices=0.025ucosm --gas=auto --gas-adjustment=1.2 -y --chain-id=testnet --trust-node
     expect "passphrase:"
-        send \"$PW\\r\"
-    expect "y/N]:"
-        send \"y\\r\"
+    send \"$PW\\r\"
     expect "passphrase:"
-        send \"$PW\\r\"
+    send \"$PW\\r\"
     expect eof
     "
-    echo ${PRIV_KEYS[$i]}
     sleep 10
-    ACCOUNT_NUMS[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query account $address --trust-node | grep account_number | sed "s/account_number://g" | sed 's/ //g' | sed "s/\r//g" | sed "s/\n//g")
+
+    kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query wasm list-contract-by-code $CODE_ID --trust-node --chain-id=testnet  >> contract-list.txt 
+    CONTRACT[$i]=$(kubectl exec $GAIA_SEED -it --container gaia-seed -- wasmcli query wasm list-contract-by-code $CODE_ID --trust-node --chain-id=testnet | jq -r ".[$i].address")    
 done
 
-
+echo "contract id list"
+for i in $(seq 0 $IA_COUNT)
+do
+    echo "contract" $i ${CONTRACT[$i]}
+done
 
 wait_lb_ready
 
@@ -165,5 +182,5 @@ do
     fi
     node_index=$(($node_index+$PLUS-1))
 
-    echo ${NODE_ADDRESSES[$node_index]} ${PRIV_KEYS[$i]} ${ACCOUNT_NUMS[$i]} >> test-info-after-mempool-full.txt
+    echo ${NODE_ADDRESSES[$node_index]} ${PRIV_KEYS[$i]} ${ACCOUNT_NUMS[$i]} ${CONTRACT[$i]} >> test-info-after-mempool-full.txt
 done
