@@ -54,7 +54,7 @@ cp -f ./genesis.json $HOME/.wasmd/config
 SEED=$(curl $COUCHDB/seed-info/seed-info | jq .target)
 sed -i "s/seeds = \"\"/seeds = $SEED/g" $HOME/.wasmd/config/config.toml
 sed -i "s/prometheus = false/prometheus = true/g" $HOME/.wasmd/config/config.toml
-sed -i "s/size = 5000/size = 10000/g" $HOME/.wasmd/config/config.toml
+#sed -i "s/size = 5000/size = 10000/g" $HOME/.wasmd/config/config.toml
 sed -i -r 's/minimum-gas-prices = ""/minimum-gas-prices = "0.025ucosm"/' $HOME/.wasmd/config/app.toml
 
 WALLET_ADDRESS=$(show_key node)

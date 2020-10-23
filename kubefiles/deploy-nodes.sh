@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# == 0 ];then 
+if [ $# -eq 0 ];then 
     echo "Please enter param, test or test-wasm"
     exit 0
 fi
@@ -177,9 +177,9 @@ cat ./grafana-desc/grafana-template.yaml | sed "s/{NODE_NAME}/${NAME_ARRAY[$INDE
 kubectl apply -f grafana-desc/grafana.yaml
     
 cd ../gaiapy
-if [[ $param == "test" ]];then
+if [ $param == "test" ];then
+    echo "test"
     ./test.sh 10
 else
     ./test-wasm.sh 10
 fi
-
